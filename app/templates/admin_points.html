@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-3">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Global Points</h5>
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Label</th>
+                            <th>Value</th>
+                            <th>Order</th>
+                            <th>Active</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in points %}
+                        <tr>
+                            <td>{{ p.Code }}</td>
+                            <td>{{ p.Label }}</td>
+                            <td>{{ p.Value }}</td>
+                            <td>{{ p.SortOrder }}</td>
+                            <td>{{ 'Yes' if p.Active else 'No' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <hr>
+                <form class="row g-2" action="/admin/points/add" method="post">
+                    <div class="col-3"><input class="form-control" name="Code" placeholder="Code" required></div>
+                    <div class="col-3"><input class="form-control" name="Label" placeholder="Label" required></div>
+                    <div class="col-2"><input class="form-control" type="number" name="Value" placeholder="Value"
+                            required></div>
+                    <div class="col-2"><input class="form-control" type="number" name="SortOrder" placeholder="Order"
+                            value="0"></div>
+                    <div class="col-2">
+                        <select class="form-select" name="Active">
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="col-12"><button class="btn btn-success">Add global point</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Per-game Overrides</h5>
+                <form action="/admin/points/override" method="post" class="row g-2">
+                    <div class="col-12">
+                        <label class="form-label">Game</label>
+                        <select class="form-select" name="GameID">
+                            {% for g in games %}<option value="{{ g.GameID }}">{{ g.GameName }}</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Code</label>
+                        <select class="form-select" name="Code">
+                            {% for p in points %}<option>{{ p.Code }}</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Value</label>
+                        <input class="form-control" type="number" name="Value" required>
+                    </div>
+                    <div class="col-12"><button class="btn btn-primary">Save Override</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

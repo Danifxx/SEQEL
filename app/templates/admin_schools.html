@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Schools</h5>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>UID</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in schools %}
+                        <tr>
+                            <td>{{ s.SchoolUID4 }}</td>
+                            <td>{{ s.SchoolName }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">Add School</h6>
+                <form action="/admin/schools/add" method="post" class="row g-2">
+                    <div class="col-12">
+                        <input class="form-control" name="SchoolName" placeholder="School name" required>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-success">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Upload Students CSV</h5>
+        <p>Columns: <code>first_name,last_name,school,cohort</code> (we also accept <i>cohurt</i>).</p>
+        <form action="/admin/upload" method="post" enctype="multipart/form-data" class="row g-3">
+            <div class="col-12">
+                <input class="form-control" type="file" name="file" accept=".csv" required>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary">Upload</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

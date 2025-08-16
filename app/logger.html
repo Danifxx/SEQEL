@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Logger</h5>
+        <form action="/logger/submit" method="post" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Game</label>
+                <select class="form-select" id="GameID" name="GameID" required>
+                    {% for g in games %}<option value="{{ g.GameID }}" data-mode="{{ g.ScoringMode }}"
+                        data-finals="{{ g.FinalsMetric or '' }}">{{ g.GameName }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Stream</label>
+                <select class="form-select" name="Stream" required>
+                    <option value="SchoolsCup">Schools Cup</option>
+                    <option value="Competition">Competition</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Round</label>
+                <select class="form-select" name="RoundID" required>
+                    {% for r in rounds %}<option value="{{ r.RoundID }}">{{ r.Label }} ({{ r.StartTime.strftime('%H:%M')
+                        }})</option>{% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Area</label>
+                <input class="form-control" name="AreaID" placeholder="AreaID (advanced)" required>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">Mode</label>
+                <select class="form-select" id="Mode" name="Mode">
+                    <option value="WIN_LOSE">Win / Lose</option>
+                    <option value="TOP4">Top 4</option>
+                    <option value="FINALS">Finals entry (one player + metric)</option>
+                </select>
+            </div>
+
+            <div id="panel-winlose" class="col-12">
+                <div class="row g-2">
+                    <div class="col-md-3"><input class="form-control" name="UID1" placeholder="UID A"></div>
+                    <div class="col-md-3"><input class="form-control" name="UID2" placeholder="UID B"></div>
+                    <div class="col-md-3">
+                        <input class="form-control" name="FinalsMetricValue"
+                            placeholder="Lap seconds / Score (optional)">
+                    </div>
+                    <div class="col-md-3">
+                        <input class="form-control" name="WinnerUID" placeholder="Winner UID">
+                    </div>
+                </div>
+            </div>
+
+            <div id="panel-top4" class="col-12 d-none">
+                <div class="row g-2">
+                    <div class="col-md-3"><input class="form-control" name="Place1" placeholder="1st UID"></div>
+                    <div class="col-md-3"><input class="form-control" name="Place2" placeholder="2nd UID"></div>
+                    <div class="col-md-3"><input class="form-control" name="Place3" placeholder="3rd UID"></div>
+                    <div class="col-md-3"><input class="form-control" name="Place4" placeholder="4th UID"></div>
+                </div>
+            </div>
+
+            <div id="panel-finals" class="col-12 d-none">
+                <div class="row g-2">
+                    <div class="col-md-6"><input class="form-control" name="FinalsUID" placeholder="UID"></div>
+                    <div class="col-md-6"><input class="form-control" name="FinalsMetricValue"
+                            placeholder="Seconds or Score"></div>
+                </div>
+                <div class="form-text" id="finals-hint">Finals metric hint appears here</div>
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-primary">Submit & next</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const modeSel = document.getElementById('Mode');
+    const winlose = document.getElementById('panel-winlose');
+    const top4 = document.getElementById('panel-top4');
+    const finals = document.getElementById('panel-finals');
+    const gameSel = document.getElementById('GameID');
+    const finalsHint = document.getElementById('finals-hint');
+
+    function syncPanels() {
+        const v = modeSel.value;
+        winlose.classList.toggle('d-none', v !== 'WIN_LOSE');
+        top4.classList.toggle('d-none', v !== 'TOP4');
+        finals.classList.toggle('d-none', v !== 'FINALS');
+    }
+
+    function syncFinalsHint() {
+        const opt = gameSel.options[gameSel.selectedIndex];
+        const fm = opt.getAttribute('data-finals') || '';
+        if (fm === 'LowerIsBetter') { finalsHint.textContent = 'Lower is better (e.g., lap time).'; }
+        else if (fm === 'HigherIsBetter') { finalsHint.textContent = 'Higher is better (e.g., score).'; }
+        else { finalsHint.textContent = 'Finals metric not defined for this game.'; }
+    }
+
+    modeSel.addEventListener('change', syncPanels);
+    gameSel.addEventListener('change', syncFinalsHint);
+    syncPanels(); syncFinalsHint();
+</script>
+{% endblock %}

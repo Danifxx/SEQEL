@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Settings</h5>
+        <form action="/admin/settings" method="post" class="row g-3">
+            <div class="col-12">
+                <label class="form-label">Sponsor images path</label>
+                <input class="form-control" name="SponsorPath" value="{{ sponsor }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Logger PIN</label>
+                <input class="form-control" name="PIN_Logger" value="{{ pin_logger }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Admin PIN</label>
+                <input class="form-control" name="PIN_Admin" value="{{ pin_admin }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Drone TimeLap bonus (Yes/No)</label>
+                <input class="form-control" name="DRONE_TIMELAP_BONUS" value="{{ drone }}">
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

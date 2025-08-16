@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-3 bg-white shadow-sm rounded">
+  <div class="d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Top 30 Students (UID + School)</h5>
+    <small class="text-muted">Auto-refreshes every 10s</small>
+  </div>
+  <hr>
+  <ol class="list-group list-group-numbered">
+    {% for r in rows %}
+      <li class="list-group-item d-flex justify-content-between align-items-center {% if loop.index==1 %}list-group-item-warning{% elif loop.index==2 %}list-group-item-info{% endif %}">
+        <span>#{{ loop.index }} &nbsp; UID {{ r.uid }} — {{ r.school }}</span>
+        <span class="badge bg-dark rounded-pill">{{ r.pts }}</span>
+      </li>
+    {% endfor %}
+  </ol>
+</div>
+<script>
+  setTimeout(()=>location.reload(), 10000);
+</script>
+{% endblock %}

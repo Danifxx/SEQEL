@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-3">
+    <div class="col-12">
+        <form class="d-flex mb-2" method="get" action="/admin/students">
+            <input class="form-control me-2" name="q" value="{{ q }}" placeholder="Search by name or school">
+            <button class="btn btn-outline-secondary">Search</button>
+        </form>
+    </div>
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Students</h5>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>UID</th>
+                            <th>Name</th>
+                            <th>School</th>
+                            <th>Cohort</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for st in students %}
+                        <tr>
+                            <td>{{ st.UID4 }}</td>
+                            <td>{{ st.FirstName }} {{ st.LastName }}</td>
+                            <td>{{ st.school.SchoolName }}</td>
+                            <td>{{ st.Cohort }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">Add Student</h6>
+                <form action="/admin/students/add" method="post" class="row g-2">
+                    <div class="col-12">
+                        <!-- School first, and link to add school -->
+                        <label class="form-label">School</label>
+                        <div class="d-flex gap-2">
+                            <select class="form-select" name="SchoolID" required>
+                                {% for s in schools %}<option value="{{ s.SchoolID }}">{{ s.SchoolName }}</option>{%
+                                endfor %}
+                            </select>
+                            <a class="btn btn-outline-secondary" href="/admin/schools">Add School</a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">First name</label>
+                        <input class="form-control" name="FirstName" required>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Last name</label>
+                        <input class="form-control" name="LastName" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Cohort</label>
+                        <select class="form-select" name="Cohort" required>
+                            <option>High</option>
+                            <option>Primary</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-success">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

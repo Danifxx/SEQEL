@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Maintenance</h5>
+        <p>Reset clears Matches, MatchParticipants and any per-game points overrides. Master lists are kept.</p>
+        <form action="/admin/maintenance/reset" method="post" onsubmit="return confirm('Reset (soft) event data?');"
+            class="d-inline">
+            <input type="hidden" name="scope" value="day">
+            <button class="btn btn-danger">Reset</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

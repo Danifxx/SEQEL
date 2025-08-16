@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-3">
+    <div class="col-12 col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Admin</h5>
+                <p class="mb-3">Quick links:</p>
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action" href="/admin/upload">Upload Students CSV</a>
+                    <a class="list-group-item list-group-item-action" href="/admin/schools">Schools</a>
+                    <a class="list-group-item list-group-item-action" href="/admin/students">Students</a>
+                    <a class="list-group-item list-group-item-action" href="/admin/points">Points</a>
+                    <a class="list-group-item list-group-item-action" href="/admin/settings">Settings</a>
+                    <a class="list-group-item list-group-item-action" href="/admin/maintenance">Maintenance</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">Summary</h6>
+                <ul class="mb-0">
+                    <li>Points: {{ counts.points }}</li>
+                    <li>Games: {{ counts.games }}</li>
+                    <li>Rounds: {{ counts.rounds }}</li>
+                    <li>Events: {{ counts.events }}</li>
+                    <li>Areas: {{ counts.areas }}</li>
+                    <li>Schools: {{ counts.schools }}</li>
+                    <li>Students: {{ counts.students }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
