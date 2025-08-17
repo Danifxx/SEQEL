@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Print Centre</h2>
+<h3>Area schedules</h3>
+<form method="get" action="/admin/print/area.pdf" class="inline">
+  <label>Game <select name="game_id">{% for g in games %}<option value="{{ g.GameID }}">{{ g.GameName }}</option>{% endfor %}</select></label>
+  <label>Area <select name="area_id">{% for a in areas %}<option value="{{ a.AreaID }}">{{ a.AreaName }} ({{ a.Stream }})</option>{% endfor %}</select></label>
+  <button type="submit">Download PDF</button>
+</form>
+
+<h3>School run-sheet</h3>
+<form method="get" action="/admin/print/school.pdf" class="inline">
+  <label>School <select name="school_id">{% for s in schools %}<option value="{{ s.SchoolID }}">{{ s.SchoolName }}</option>{% endfor %}</select></label>
+  <button type="submit">Download PDF</button>
+</form>
+{% endblock %}

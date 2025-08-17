@@ -1,0 +1,27 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="m-0">Students</h3>
+  <a class="btn btn-brand" href="/admin/students/new">Add student</a>
+</div>
+<table class="table table-striped align-middle">
+  <thead><tr><th>UID</th><th>Name</th><th>School</th><th>Cohort</th><th>Year</th><th></th></tr></thead>
+  <tbody>
+  {% for st, sch in rows %}
+    <tr>
+      <td><code>{{ st.UID4 }}</code></td>
+      <td>{{ st.FirstName }} {{ st.LastName }}</td>
+      <td>{{ sch.SchoolName }}</td>
+      <td>{{ st.Cohort }}</td>
+      <td>{{ st.Year or "" }}</td>
+      <td class="text-nowrap">
+        <form action="/admin/students/{{ st.StudentID }}/delete" method="post" onsubmit="return confirm('Delete this student?');">
+          <button class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

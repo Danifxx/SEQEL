@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Top 30 Students</h2>
+<div class="filters">
+  <label>Game
+    <select id="game">
+      <option value="">All</option>
+      {% for g in games %}<option value="{{ g.GameID }}">{{ g.GameName }}</option>{% endfor %}
+    </select>
+  </label>
+  <label>Stream
+    <select id="stream">
+      <option value="">Both</option>
+      <option>SchoolsCup</option>
+      <option>Competition</option>
+    </select>
+  </label>
+  <span id="stamp"></span>
+</div>
+<div id="list">Loading…</div>
+<script>
+async function refresh(){
+  const game = document.getElementById('game').value;
+  const stream = document.getElementById('stream').value;
+  const url = '/api/top30?'+(game?('game_id='+game+'&'):'')+(stream?('stream='+stream):'');
+  const d = await fetchJSON(url);
+  document.getElementById('stamp').textContent = 'Updated ' + new Date().toLocaleTimeString();
+  const rows = d.map((r,i)=>`<tr class="${i===0?'gold':(i===1?'silver':'')}"><td>${i+1}</td><td>${r.uid}</td><td>${r.school}</td><td>${r.points}</td></tr>`).join('');
+  document.getElementById('list').innerHTML = '<table class="tbl"><tr><th>#</th><th>Student UID</th><th>School</th><th>Points</th></tr>'+rows+'</table>';
+}
+document.getElementById('game').onchange=refresh;
+document.getElementById('stream').onchange=refresh;
+refresh(); setInterval(refresh, 5000);
+</script>
+{% endblock %}

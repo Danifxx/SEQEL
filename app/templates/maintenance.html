@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Maintenance</h2>
+<p><a href="/admin/maintenance/archive.csv">Download archive (CSV)</a></p>
+<form method="post" action="/admin/maintenance/reset" class="inline">
+  <label>Reset scope
+    <select name="scope">
+      <option value="day">Clear Day</option>
+      <option value="tournament">Clear Tournament</option>
+      <option value="full">Full Reset</option>
+    </select>
+  </label>
+  <button type="submit">Run Reset</button>
+</form>
+{% endblock %}

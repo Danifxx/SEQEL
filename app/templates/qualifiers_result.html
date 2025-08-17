@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Top seeds (provisional)</h2>
+<table class="tbl"><tr><th>#</th><th>UID</th><th>Points</th></tr>
+{% for r in rows %}
+  <tr><td>{{ loop.index }}</td><td>{{ r[0] }}</td><td>{{ r[1]|int }}</td></tr>
+{% endfor %}
+</table>
+<form method="post" action="/admin/qualifiers/generate">
+  <input type="hidden" name="game_id" value="{{ game_id }}">
+  <button type="submit">Generate Quarter/Semi/Final matches</button>
+</form>
+<p>Note: residual ties after school-points tiebreak require manual resolution at the logger.</p>
+{% endblock %}

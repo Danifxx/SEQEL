@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Points</h2>
+<table class="tbl">
+  <tr><th>Code</th><th>Label</th><th>Value</th><th>Active</th><th>Order</th><th></th></tr>
+  {% for p in points %}
+    <tr>
+      <form method="post" action="/admin/points/update">
+      <td><input name="Code" value="{{ p.Code }}" readonly></td>
+      <td><input name="Label" value="{{ p.Label }}"></td>
+      <td><input name="Value" type="number" value="{{ p.Value }}"></td>
+      <td><select name="Active"><option value="1" {% if p.Active %}selected{% endif %}>Yes</option><option value="0" {% if not p.Active %}selected{% endif %}>No</option></select></td>
+      <td><input name="SortOrder" type="number" value="{{ p.SortOrder }}"></td>
+      <td><button type="submit">Save</button></td>
+      </form>
+    </tr>
+  {% endfor %}
+</table>
+
+<h3>Add new type</h3>
+<form method="post" action="/admin/points/add" class="inline">
+  <input name="Code" placeholder="Code (e.g., Bonus10)" required>
+  <input name="Label" placeholder="Label" required>
+  <input name="Value" type="number" placeholder="Points" required>
+  <input name="SortOrder" type="number" value="50">
+  <select name="Active"><option value="1">Yes</option><option value="0">No</option></select>
+  <button type="submit">Add</button>
+</form>
+
+<h3>Per-game overrides</h3>
+<form method="post" action="/admin/points/override" class="inline">
+  <select name="GameID" required>
+    {% for g in games %}<option value="{{ g.GameID }}">{{ g.GameName }}</option>{% endfor %}
+  </select>
+  <input name="Code" placeholder="Points Code (e.g., Win)" required>
+  <input name="Value" type="number" placeholder="Override Value" required>
+  <button type="submit">Set Override</button>
+</form>
+
+<form method="post" action="/admin/points/recalculate"><button type="submit">Recalculate saved points</button></form>
+{% endblock %}

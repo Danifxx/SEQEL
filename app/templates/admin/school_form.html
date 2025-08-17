@@ -1,0 +1,22 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h3>Add school</h3>
+<form action="/admin/schools/create" method="post" class="row g-3" style="max-width:540px">
+  <div class="col-12">
+    <label class="form-label">School name</label>
+    <input class="form-control" name="SchoolName" required>
+  </div>
+  <div class="col-12">
+    <label class="form-label">Cohort type</label>
+    <select class="form-select" name="CohortType" required>
+      <option value="High">High</option>
+      <option value="Primary">Primary</option>
+    </select>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-brand">Save</button>
+    <a class="btn btn-outline-secondary" href="/admin/schools">Cancel</a>
+  </div>
+</form>
+{% endblock %}

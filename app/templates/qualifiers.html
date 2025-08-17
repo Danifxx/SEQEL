@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Qualifiers</h2>
+<p>Select a game to compute top 4 seeds (Competition stream up to Round 21):</p>
+<ul>
+  {% for g in games %}
+    <li><a href="/admin/qualifiers/run?game_id={{ g.GameID }}">{{ g.GameName }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

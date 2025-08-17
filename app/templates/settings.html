@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Settings</h2>
+<form method="post">
+  <label>Sponsor folder path <input name="SponsorPath" value="{{ sponsor }}" style="width:60%"></label>
+  <label>Logger PIN <input name="PIN_Logger" value="{{ pin_logger }}"></label>
+  <label>Admin PIN <input name="PIN_Admin" value="{{ pin_admin }}"></label>
+  <button type="submit">Save</button>
+</form>
+{% endblock %}

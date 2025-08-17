@@ -1,0 +1,67 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-md-6 col-lg-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Seed</h5>
+        <p class="card-text">Populate master data (points, games, rounds, events/areas).</p>
+        <a class="link-primary" href="/admin/seed">Run /admin/seed</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Summary</h5>
+        <a class="link-primary" href="/admin/summary">View /admin/summary</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Schools</h5>
+        <a class="btn btn-brand btn-sm me-2" href="/admin/schools/new">Add school</a>
+        <a class="btn btn-outline-brand btn-sm" href="/admin/schools">List schools</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Upload Students CSV</h5>
+        <p class="small text-muted">
+          Columns (no UID): <b data-bs-toggle="tooltip" title="first_name,last_name,school,cohort,year (optional)">
+          first_name,last_name,school,cohort,year</b><br>
+          cohort = <i>primary</i> or <i>high</i>.
+        </p>
+        <form action="/admin/students/upload_csv" method="post" enctype="multipart/form-data" class="d-flex gap-2 align-items-center">
+          <input class="form-control form-control-sm" type="file" name="file" accept=".csv" required>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="autocreate" id="ac" checked>
+            <label class="form-check-label" for="ac">Auto-create schools</label>
+          </div>
+          <button class="btn btn-sm btn-brand">Upload</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card border-danger-subtle shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title text-danger">Reset (soft)</h5>
+        <p class="card-text">Wipes matches, participants, per-game point overrides. Keeps master lists.</p>
+        <form action="/admin/reset_soft" method="post" onsubmit="return confirm('Wipe matches/results?')">
+          <button class="btn btn-outline-danger">Reset (soft)</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

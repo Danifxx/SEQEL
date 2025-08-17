@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Leaderboards</h2>
+<section class="grid">
+  <div class="card">
+    <h3>Overall by School</h3>
+    <div id="overall">Loading…</div>
+  </div>
+  <div class="card">
+    <h3>Schools Cup (avg per unique ×100)</h3>
+    <div id="scavg">Loading…</div>
+  </div>
+</section>
+<script>
+async function loadAll(){
+  try{
+    let o = await fetchJSON('/api/overall');
+    document.getElementById('overall').innerHTML = '<table class="tbl"><tr><th>#</th><th>School</th><th>Points</th></tr>'+o.map((r,i)=>`<tr><td>${i+1}</td><td>${r.school}</td><td>${r.points}</td></tr>`).join('')+'</table>';
+  }catch(e){document.getElementById('overall').textContent='Failed';}
+  try{
+    let s = await fetchJSON('/api/schools_cup_avg');
+    document.getElementById('scavg').innerHTML = '<table class="tbl"><tr><th>#</th><th>School</th><th>Avg×100</th></tr>'+s.map((r,i)=>`<tr><td>${i+1}</td><td>${r.school}</td><td>${Math.round(r.avgx100)}</td></tr>`).join('')+'</table>';
+  }catch(e){document.getElementById('scavg').textContent='Failed';}
+}
+loadAll(); setInterval(loadAll, 5000);
+</script>
+{% endblock %}

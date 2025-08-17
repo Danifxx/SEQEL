@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Logger</h2>
+{% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+{% if message %}<div class="alert success">{{ message }}</div>{% endif %}
+<form method="post" id="logform">
+  <label>Event
+    <select name="event_id" id="event" required>
+      {% for e in events %}<option value="{{ e.EventID }}">{{ e.game.GameName }} — {{ e.Stream }}</option>{% endfor %}
+    </select>
+  </label>
+  <label>Area
+    <select name="area_id" id="area" required>
+      {% for a in areas %}<option value="{{ a.AreaID }}">{{ a.AreaName }} ({{ a.Stream }})</option>{% endfor %}
+    </select>
+  </label>
+  <label>Round
+    <select name="round_id" id="round" required>
+      {% for r in rounds %}<option value="{{ r.RoundID }}">{{ r.Label }}</option>{% endfor %}
+    </select>
+  </label>
+
+  <div id="mode_fields">
+    <!-- JS will swap modes -->
+  </div>
+
+  <div class="inline">
+    <button type="submit">Save</button>
+    <button type="button" onclick="cancelMatch()">Cancel Round</button>
+  </div>
+  <input type="hidden" name="cancel" id="cancel">
+  <input type="hidden" name="cancel_reason" id="cancel_reason">
+</form>
+
+<script>
+const modeTmpl = {
+  WIN_LOSE: `
+    <input type="hidden" name="mode" value="WIN_LOSE">
+    <div class="grid2">
+      <label>UID #1 <input name="uid1" maxlength="4" oninput="checkUID(this, 'u1')"><small id="u1"></small></label>
+      <label>UID #2 <input name="uid2" maxlength="4" oninput="checkUID(this, 'u2')"><small id="u2"></small></label>
+    </div>
+    <label>Winner
+      <select name="winner"><option value="1">UID #1</option><option value="2">UID #2</option></select>
+    </label>
+    <label>Drone lap time (optional, mm:ss.mmm or ss.mmm) <input name="drone_time" placeholder="00:42.500"></label>
+  `,
+  TOP4: `
+    <input type="hidden" name="mode" value="TOP4">
+    <div class="grid4">
+      ${[1,2,3,4].map(i=>`<div><label>UID #${i} <input name="uid${i}" maxlength="4" oninput="checkUID(this, 'u${i}')"><small id="u${i}"></small></label>
+      <label>Rank <select name="rank${i}"><option>1</option><option>2</option><option>3</option><option>4</option></select></label></div>`).join('')}
+    </div>
+  `,
+  FINALS: `
+    <input type="hidden" name="mode" value="FINALS">
+    <label>Finalist UID <input name="finals_uid" maxlength="4" oninput="checkUID(this, 'uf')"><small id="uf"></small></label>
+    <label>Score/Time (mm:ss.mmm or number) <input name="finals_value" placeholder="00:42.100 or 200"></label>
+  `
+};
+
+async function guessMode(){
+  // Simple heuristic: if selected Event's game is TOP4 show TOP4 else WIN_LOSE; finals rounds map to FINALS
+  const evSel = document.getElementById('event');
+  const rSel = document.getElementById('round');
+  const rText = rSel.options[rSel.selectedIndex].text;
+  let mode = 'WIN_LOSE';
+  if(rText.startsWith('Quarter') || rText.startsWith('Semi') || rText.startsWith('Final')) mode='FINALS';
+  // Server cannot expose game mode here without extra API; default to WIN_LOSE and allow switcher later
+  document.getElementById('mode_fields').innerHTML = modeTmpl[mode];
+}
+async function checkUID(inp, infoId){
+  const v = inp.value.trim();
+  if(v.length!==4){ document.getElementById(infoId).textContent=''; return; }
+  try{
+    const r = await fetch('/lookup/'+encodeURIComponent(v));
+    if(r.ok){
+      const j = await r.json();
+      document.getElementById(infoId).textContent = 'School: '+j.school;
+    }else{
+      document.getElementById(infoId).textContent = 'Not found';
+    }
+  }catch(e){
+    document.getElementById(infoId).textContent = 'Err';
+  }
+}
+function cancelMatch(){
+  const reason = prompt('Cancel reason: Over time, Equipment issue, Player no-show, Safety, Other');
+  if(!reason) return;
+  document.getElementById('cancel').value='1';
+  document.getElementById('cancel_reason').value=reason;
+  document.getElementById('logform').submit();
+}
+document.getElementById('round').addEventListener('change', guessMode);
+document.addEventListener('DOMContentLoaded', guessMode);
+</script>
+{% endblock %}

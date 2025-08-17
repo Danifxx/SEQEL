@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Students</h2>
+<form method="get" class="inline">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search by name, UID or school">
+  <button type="submit">Search</button>
+  {% if imported %}<span class="chip">Imported {{ imported }}</span>{% endif %}
+</form>
+<table class="tbl"><tr><th>UID</th><th>Name</th><th>School</th><th>Cohort</th></tr>
+{% for it in items %}<tr><td><strong>{{ it.uid }}</strong></td><td>{{ it.name }}</td><td>{{ it.school }}</td><td>{{ it.cohort }}</td></tr>{% endfor %}
+</table>
+{% endblock %}

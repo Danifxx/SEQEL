@@ -1,0 +1,35 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h3>Add student</h3>
+<form action="/admin/students/create" method="post" class="row g-3" style="max-width:640px">
+  <div class="col-md-6">
+    <label class="form-label">School</label>
+    <div class="input-group">
+      <select class="form-select" name="SchoolID" required>
+        <option value="">Choose school…</option>
+        {% for s in schools %}
+          <option value="{{ s.SchoolID }}">{{ s.SchoolName }} ({{ s.CohortType }})</option>
+        {% endfor %}
+      </select>
+      <a class="btn btn-outline-brand" href="/admin/schools/new" data-bs-toggle="tooltip" title="Add a new school">Add school</a>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">First name</label>
+    <input class="form-control" name="FirstName" required>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Last name</label>
+    <input class="form-control" name="LastName" required>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Year</label>
+    <input class="form-control" type="number" name="Year" min="1" max="13" placeholder="">
+  </div>
+  <div class="col-12">
+    <button class="btn btn-brand">Save</button>
+    <a class="btn btn-outline-secondary" href="/admin/students">Cancel</a>
+  </div>
+</form>
+{% endblock %}

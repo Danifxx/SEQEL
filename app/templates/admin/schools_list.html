@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="m-0">Schools</h3>
+  <a class="btn btn-brand" href="/admin/schools/new">Add school</a>
+</div>
+<table class="table table-hover align-middle">
+  <thead><tr><th>Name</th><th>Cohort</th><th class="text-end">Students</th><th></th></tr></thead>
+  <tbody>
+    {% for sch, count in rows %}
+    <tr>
+      <td>{{ sch.SchoolName }}</td>
+      <td>{{ sch.CohortType }}</td>
+      <td class="text-end">{{ count }}</td>
+      <td class="text-nowrap">
+        <form action="/admin/schools/{{ sch.SchoolID }}/delete" method="post" onsubmit="return confirm('Delete this school?');">
+          <button class="btn btn-sm btn-outline-danger" {% if count|int>0 %}disabled data-bs-toggle="tooltip" title="Cannot delete: has students"{% endif %}>Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
